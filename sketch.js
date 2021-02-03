@@ -4,9 +4,13 @@ var pathImg, boyImg, cashImg, diamondsImg, jwelleryImg, swordImg;
 var treasureCollection = 0;
 var cashG, diamondsG, jwelleryG, swordGroup;
 
+var sword;
+
 var PLAY = 1;
 var END = 0;
 var gameState = PLAY;
+
+var chances = 5;
 
 var treasureCollection = 0;
 
@@ -68,24 +72,14 @@ function draw() {
 
     } else if (jwelleryG.isTouching(boy)) {
       treasureCollection += 150;
-      jwelleryG.destroyEach();
+      
 
     } else if (swordGroup.isTouching(boy)) {
-      gameState = END;
-      boy.addAnimation("sahilRunning", endImg);
-      boy.x = 200;
-      boy.y = 300;
-      boy.scale = 0.4;
-
-      cashG.destroyEach();
-      diamondsG.destroyEach();
-      jwelleryG.destroyEach();
+      chances--;
       swordGroup.destroyEach();
-
-      cashG.setVelocityYEach();
-      diamondsG.setVelocityYEach();
-      jwelleryG.setVelocityYEach();
-      swordGroup.setVelocityYEach();
+      if(chances === 0){
+        endGame();
+      } 
 
     }
 
@@ -94,10 +88,27 @@ function draw() {
     textSize(20);
     fill(255);
     text("Treasure: " + treasureCollection, 150, 30);
-  } else if (gameState === END) {
+    text("Lives: " + chances, 20, 30);
 
-  }
+  } 
+}
 
+function endGame(){
+  gameState = END;
+  boy.addAnimation("sahilRunning", endImg);
+  boy.x = 200;
+  boy.y = 300;
+  boy.scale = 0.4;
+
+  cashG.destroyEach();
+  diamondsG.destroyEach();
+  jwelleryG.destroyEach();
+  swordGroup.destroyEach();
+
+  cashG.setVelocityYEach();
+  diamondsG.setVelocityYEach();
+  jwelleryG.setVelocityYEach();
+  swordGroup.setVelocityYEach();
 }
 
 function createCash() {
@@ -135,7 +146,7 @@ function createJwellery() {
 
 function createSword() {
   if (World.frameCount % 150 == 0) {
-    var sword = createSprite(Math.round(random(50, 350), 40, 10, 10));
+    sword = createSprite(Math.round(random(50, 350), 40, 10, 10));
     sword.addImage(swordImg);
     sword.scale = 0.1;
     sword.velocityY = 3;
